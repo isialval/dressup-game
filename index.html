@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dressup</title>
+  </head>
+  <body>
+    <div id="page">
+      <main id="game-shell">
+        <div id="app">
+          <aside id="categories"></aside>
+
+          <section id="ui"></section>
+
+          <section id="play-area">
+            <div id="stage-frame">
+              <div id="ztools" class="hidden">
+                <span id="zlabel">Capa: —</span>
+                <button id="zback" type="button">⬇︎ Atrás</button>
+                <button id="zfront" type="button">⬆︎ Delante</button>
+              </div>
+
+              <div id="stage"></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
