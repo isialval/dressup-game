@@ -6,6 +6,9 @@
   --accent: #d89aa4;
   --shadow: rgba(60, 40, 20, 0.12);
   --r: 18px;
+  --scrollbar-thumb: rgba(126, 165, 138, 0.55);
+  --scrollbar-thumb-hover: rgba(126, 165, 138, 0.75);
+  --scrollbar-track: rgba(201, 183, 162, 0.2);
 }
 
 html,
@@ -29,7 +32,7 @@ body {
 }
 
 #game-shell {
-  width: min(1200px, 100%);
+  width: min(1400px, 100%);
   height: min(880px, calc(100dvh - 56px));
   background: rgba(255, 250, 241, 0.65);
   background-image: url("/assets/ui/texture-2.webp");
@@ -47,7 +50,7 @@ body {
 #app {
   height: 100%;
   display: grid;
-  grid-template-columns: clamp(64px, 6vw, 84px) minmax(280px, 32vw) minmax(320px,
+  grid-template-columns: clamp(112px, 6vw, 84px) minmax(280px, 32vw) minmax(320px,
       1fr);
   gap: 14px;
   box-sizing: border-box;
@@ -59,9 +62,11 @@ body {
 
 #categories,
 #ui,
-#play-area {
+#play-area,
+#stage-frame {
   min-width: 0;
   min-height: 0;
+  box-sizing: border-box;
 }
 
 #categories {
@@ -79,11 +84,13 @@ body {
   align-items: center;
   box-shadow: 0 10px 26px var(--shadow);
   overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 .cat {
-  width: 52px;
-  height: 52px;
+  width: 80px;
+  height: 80px;
   border-radius: 14px;
   border: 2px solid var(--stroke);
   background: #fff;
@@ -124,6 +131,32 @@ body {
   padding: 12px;
   overflow: auto;
   box-shadow: 0 10px 26px var(--shadow);
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+#categories::-webkit-scrollbar,
+#ui::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+#categories::-webkit-scrollbar-track,
+#ui::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#categories::-webkit-scrollbar-thumb,
+#ui::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+#categories::-webkit-scrollbar-thumb:hover,
+#ui::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
 }
 
 .panel {
@@ -132,9 +165,10 @@ body {
 
 .panel.active {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(86px, 1fr));
+  grid-template-columns: repeat(auto-fill, 120px);
   gap: 12px;
   align-content: start;
+  justify-content: center;
 }
 
 .item {
@@ -277,7 +311,7 @@ canvas {
   }
 
   #app {
-    grid-template-columns: clamp(64px, 9vw, 84px) 1fr;
+    grid-template-columns: clamp(112px, 9vw, 84px) 1fr;
     grid-template-rows: minmax(260px, 1fr) minmax(220px, 0.9fr);
   }
 
@@ -304,17 +338,18 @@ canvas {
   }
 
   #game-shell {
-    height: auto;
-    max-height: none;
-    overflow: visible;
+    height: calc(100dvh - 28px);
+    max-height: calc(100dvh - 28px);
+    overflow: hidden;
   }
 
   #app {
-    height: auto;
+    height: 100%;
     grid-template-columns: 1fr;
-    grid-template-rows: 84px minmax(360px, 55dvh) auto;
-    gap: 12px;
-    overflow: visible;
+    grid-template-rows: 84px minmax(0, 1fr) minmax(0, 0.7fr);
+    --mobile-section-gap: 16px;
+    gap: var(--mobile-section-gap);
+    overflow: hidden;
   }
 
   #categories {
@@ -359,20 +394,32 @@ canvas {
   #play-area {
     grid-column: 1;
     grid-row: 2;
-    min-height: 360px;
+    min-height: 0;
   }
 
   #ui {
     grid-column: 1;
     grid-row: 3;
-    max-height: 60dvh;
+    max-height: none;
     overflow: auto;
+  }
+
+  .panel.active {
+    grid-template-columns: repeat(auto-fill, 120px);
+    gap: 10px;
+  }
+
+  #categories,
+  #ui,
+  #stage-frame {
+    box-shadow: 0 6px 16px rgba(60, 40, 20, 0.14);
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 425px) {
   #app {
     grid-template-rows: 76px minmax(320px, 55dvh) auto;
+    --mobile-section-gap: 14px;
   }
 
   #categories {
@@ -387,5 +434,10 @@ canvas {
     width: 58px;
     height: 58px;
     border-radius: 14px;
+  }
+
+  .panel.active {
+    grid-template-columns: repeat(auto-fill, 72px);
+    gap: 8px;
   }
 }
