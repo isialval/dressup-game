@@ -255,6 +255,7 @@ export class DressUpView {
 
     if (bottom && layer === bottom) {
       this.topAboveBottom = false;
+      this.shoesAboveBottom = false;
       this.recomputeZOrder();
       return;
     }
@@ -282,6 +283,7 @@ export class DressUpView {
 
     if (bottom && layer === bottom) {
       this.topAboveBottom = true;
+      this.shoesAboveBottom = true;
       this.recomputeZOrder();
       return;
     }

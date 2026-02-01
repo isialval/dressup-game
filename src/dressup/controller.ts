@@ -6,24 +6,56 @@ export function createDressupController(
   zTools: HTMLElement,
   zLabel: HTMLElement,
 ) {
+  const LAYER_LABELS: Record<LayerName, string> = {
+    base: "base",
+    pants: "pantalones",
+    shorts: "shorts",
+    skirt: "falda",
+    dress: "vestido",
+    top: "top",
+    shoes: "zapatos",
+    hair: "cabello",
+    pets: "mascotas",
+    background: "fondo",
+  };
   const current: Partial<Record<LayerName, string>> = {};
   let selectedLayer: LayerName = "hair";
+  let zToolsDismissed = false;
 
   function hasBottomEquipped() {
     return !!(current.pants || current.shorts || current.skirt);
   }
 
+  function hasTopEquipped() {
+    return !!current.top;
+  }
+
+  function hasShoesEquipped() {
+    return !!current.shoes;
+  }
+
+  function isBottomLayer(layer: LayerName) {
+    return layer === "pants" || layer === "shorts" || layer === "skirt";
+  }
+
   function updateZToolsVisibility() {
     const shouldShowForTop = selectedLayer === "top";
     const shouldShowForShoes = selectedLayer === "shoes" && hasBottomEquipped();
-    const shouldShow = shouldShowForTop || shouldShowForShoes;
+    const shouldShowForBottom =
+      isBottomLayer(selectedLayer) && (hasTopEquipped() || hasShoesEquipped());
+    const shouldShow =
+      shouldShowForTop || shouldShowForShoes || shouldShowForBottom;
 
-    zTools.classList.toggle("hidden", !shouldShow);
-    if (shouldShow) zLabel.textContent = `Capa: ${selectedLayer}`;
+    zTools.classList.toggle("hidden", !shouldShow || zToolsDismissed);
+    if (shouldShow) {
+      const label = LAYER_LABELS[selectedLayer] ?? selectedLayer;
+      zLabel.textContent = `Capa: ${label}`;
+    }
   }
 
   function selectLayer(layer: LayerName) {
     selectedLayer = layer;
+    zToolsDismissed = false;
     updateZToolsVisibility();
   }
 
@@ -100,10 +132,21 @@ export function createDressupController(
     return selectedLayer;
   }
 
+  function dismissZTools() {
+    zToolsDismissed = true;
+    zTools.classList.add("hidden");
+  }
+
+  function isZToolsVisible() {
+    return !zTools.classList.contains("hidden");
+  }
+
   return {
     equip,
     setDefaultBackground,
     updateZToolsVisibility,
     getSelectedLayer,
+    dismissZTools,
+    isZToolsVisible,
   };
 }

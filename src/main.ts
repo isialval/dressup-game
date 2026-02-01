@@ -16,6 +16,7 @@ import { createDressupController } from "./dressup/controller";
 
 async function start() {
   const stageHost = mustGet<HTMLElement>("#stage");
+  const stageFrame = mustGet<HTMLElement>("#stage-frame");
   const ui = mustGet<HTMLElement>("#ui");
   const categoriesEl = mustGet<HTMLElement>("#categories");
 
@@ -23,6 +24,7 @@ async function start() {
   const zLabel = mustGet<HTMLElement>("#zlabel");
   const zBack = mustGet<HTMLButtonElement>("#zback");
   const zFront = mustGet<HTMLButtonElement>("#zfront");
+  const zClose = mustGet<HTMLElement>("#zclose");
 
   renderPanels(ui, catalog);
 
@@ -65,6 +67,16 @@ async function start() {
 
   zFront.addEventListener("click", () => {
     dressup.bringForward(controller.getSelectedLayer());
+  });
+
+  zClose.addEventListener("click", () => {
+    controller.dismissZTools();
+  });
+
+  stageFrame.addEventListener("click", (e) => {
+    if (!controller.isZToolsVisible()) return;
+    if ((e.target as HTMLElement).closest("#ztools")) return;
+    controller.dismissZTools();
   });
 }
 
