@@ -50,7 +50,7 @@ body {
 #app {
   height: 100%;
   display: grid;
-  grid-template-columns: clamp(112px, 6vw, 84px) minmax(280px, 32vw) minmax(320px,
+  grid-template-columns: clamp(80px, 6vw, 84px) minmax(280px, 32vw) minmax(320px,
       1fr);
   gap: 14px;
   box-sizing: border-box;
@@ -89,8 +89,15 @@ body {
 }
 
 .cat {
-  width: 80px;
-  height: 80px;
+  --cat-size: clamp(52px, 6vh, 60px);
+  width: var(--cat-size);
+  height: var(--cat-size);
+  aspect-ratio: 1 / 1;
+  min-width: var(--cat-size);
+  min-height: var(--cat-size);
+  max-width: var(--cat-size);
+  max-height: var(--cat-size);
+  flex: 0 0 var(--cat-size);
   border-radius: 14px;
   border: 2px solid var(--stroke);
   background: #fff;
